@@ -1,9 +1,9 @@
 <div align="center">
 
 <h1> Gitbot </h1>
-<img alt="GitBot-badge" src="https://img.shields.io/badge/Git-Bot-blue ?logo=github"> 
+<img alt="GitBot-badge" src="https://img.shields.io/badge/Git-Bot-blue?logo=github"> 
 <img alt="version" src="https://img.shields.io/badge/version-0.0.1-red">
-<img alt="Discord-Bot" src="https://img.shields.io/badge/Discord-Bot-violet ?logo=discord">
+<img alt="Discord-Bot" src="https://img.shields.io/badge/Discord-Bot-violet?logo=discord">
 
 <p>
 <b>GitBot</b> is a Discord Bot that manages repositories locally on the server side, and lets a server owner
