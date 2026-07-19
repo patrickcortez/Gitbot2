@@ -2,8 +2,6 @@
 
 <h1> Gitbot </h1>
 
----
-
 <p>
 <b>GitBot</b> is a Discord Bot that manages repositories locally on the server side, and lets a server owner
 control their repositories remotely without having to <i>SSH</i> or remote to their machine. <b>GitBot</b> allows 
