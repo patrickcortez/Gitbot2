@@ -15,7 +15,7 @@ users to manage their Git Repositories by talking to the bot.
 
 ### Note
 
-> ![INFORMATION] This project is being made on my free time, so don't expect consistency.
+> [!INFO] This project is being made on my free time, so don't expect consistency.
 > I am farely new to .Net Development, so expect alot of coding mistakes.
 
 ---
@@ -36,13 +36,13 @@ users to manage their Git Repositories by talking to the bot.
 
 ## Installation
 
-> ![INFORMATION] To be continued...
+> [!INFO] To be continued...
 
 ---
 
 ## Configuration
 
-> ![INFORMATION] To be continued...
+> [!INFO] To be continued...
 
 
 ---
