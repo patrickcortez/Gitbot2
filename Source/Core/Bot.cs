@@ -14,13 +14,14 @@ namespace Gitbot2.Source.Core
     {
         private IHost _host;
         private bool isRunning = true;
+        public static string CurrentRepo { get; set; }
 
         
         
 
         public Bot()
         {
-            _host = Services.BuildHost();
+            _host = Services.CreateProvider().GetService<IHost>();
             ConsoleEvent.RegisterConsoleEvents(_host);
             
 
