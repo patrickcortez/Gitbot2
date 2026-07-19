@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gitbot2.Source.UserEvs
+namespace Gitbot2.Source.Events
 {
     internal class UserJoinedHandler(ILogger<UserJoinedHandler> logger,RestClient client) : IGuildUserAddGatewayHandler
     {
