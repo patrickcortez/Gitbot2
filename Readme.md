@@ -1,0 +1,54 @@
+<div align="center">
+
+<h1> Gitbot </h1>
+
+---
+
+<p>
+<b>GitBot</b> is a Discord Bot that manages repositories locally on the server side, and lets a server owner
+control their repositories remotely without having to <i>SSH</i> or remote to their machine. <b>GitBot</b> allows 
+users to manage their Git Repositories by talking to the bot.
+<p>
+
+</div>
+
+
+---
+
+### Note
+
+> ![INFORMATION] This project is being made on my free time, so don't expect consistency.
+> I am farely new to .Net Development, so expect alot of coding mistakes.
+
+---
+
+## Features
+
+**GitBot** has alot of features that makes managing your repostories remotely, as convenient as possible:
+
+ - List all repositories in the server.
+ - Switch between repositories.
+ - Commit all changes to a repository.
+ - Merge, create, switcg and delete branches.
+ - Get the status of a repository.
+ - Manage files and directories of a repository.
+ - Pull and push to remote repository/ies.
+	
+---
+
+## Installation
+
+> ![INFORMATION] To be continued...
+
+---
+
+## Configuration
+
+> ![INFORMATION] To be continued...
+
+
+---
+
+## License
+
+This project is under **GNU General Public License v3**. See [License](LICENSE.txt)
