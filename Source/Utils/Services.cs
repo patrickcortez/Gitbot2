@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Rest;
@@ -10,6 +11,7 @@ namespace Gitbot2.Source.Utils
 {
     internal static class Services
     {
+        /* Unused
 
         public static IHost BuildHost()
         {
@@ -24,7 +26,7 @@ namespace Gitbot2.Source.Utils
                         | GatewayIntents.MessageContent
                         | GatewayIntents.DirectMessageReactions
                         | GatewayIntents.GuildMessageReactions;
-
+                        
                     }
                 )
                 .AddGatewayHandlers(typeof(Program).Assembly)
@@ -35,33 +37,37 @@ namespace Gitbot2.Source.Utils
             return builder.Build();
         }
 
-        public static ServiceProvider CreateProvider(string categoryname="")
+        */
+
+        public static IHost CreateProvider(string categoryname = "")
         {
 
             var builder = new HostApplicationBuilder(); // Build our Host
 
             builder.Services
                 .AddDiscordGateway(
+
                     option =>
                     {
+                        option.Token = new BotToken(builder.Configuration["Discord:Token"]).RawToken;
                         option.Intents = GatewayIntents.GuildMessages
                         | GatewayIntents.DirectMessages
                         | GatewayIntents.MessageContent
                         | GatewayIntents.DirectMessageReactions
                         | GatewayIntents.GuildMessageReactions;
 
+                       
+
                     }
                 )
                 .AddGatewayHandlers(typeof(Program).Assembly)
-                
+                .AddSingleton<ILogger>(LoggerFactory.Create(c => c.AddConsole()).CreateLogger(categoryname))
+                .AddLogging()
                 ;
 
-            // Stand by for now
-            return new ServiceCollection()
-                .AddSingleton<ILogger>(LoggerFactory.Create(b => b.AddConsole()).CreateLogger(categoryname))
-                .AddSingleton<RestClient>()
-                .AddSingleton<IHost>(builder.Build())
-                .BuildServiceProvider();
+
+
+            return builder.Build();
         }
     }
 }

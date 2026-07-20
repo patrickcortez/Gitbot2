@@ -21,7 +21,7 @@ namespace Gitbot2.Source.Commands
         {
             _client = client;
             CurrentCommand = Command;
-            logger = Services.CreateProvider("CommandHandler").GetRequiredService<ILogger>();
+            logger = Services.CreateProvider("CommandHandler").Services.GetRequiredService<ILogger>();
             Commands = new Dictionary<string, Func<object[], ValueTask>>() {
                 { "list", ListRepos}
             };

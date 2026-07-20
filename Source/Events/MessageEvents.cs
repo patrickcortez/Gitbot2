@@ -18,7 +18,7 @@ namespace Gitbot2.Source.Events
             {
                 char prefix = '/'; //CommandPrefix
                 bool isallowed = false;
-
+                
                
 
 

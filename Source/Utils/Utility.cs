@@ -13,7 +13,7 @@ namespace Gitbot2.Source.Utils
     {
         private static ILogger logger;
         static Utility(){
-            logger = Services.CreateProvider("Utility").GetRequiredService<ILogger>();
+            logger = Services.CreateProvider("Utility").Services.GetRequiredService<ILogger>();
         }
         public static async Task<RoleStatus> isAllowed(RestClient client,Message message)
         {
