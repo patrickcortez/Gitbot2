@@ -4,6 +4,9 @@ Tasks:
 [*] Implement Switch
 [*] Implement Status
 [*] Implement Commit
-[ ] Implement Merge
-[ ] Implement Delete
-[ ] Implement Checkout
+[*] Implement Merge
+[ ] Implement Delete (-Idk, its risky-)
+[*] Implement Checkout
+
+[ ] Clean branches output, when running `branches`
+[ ] Add more flags

@@ -71,6 +71,7 @@ namespace Gitbot2.Source.Events
                         del <repo>              - deletes a repo
                         checkout <br>           - checksout branch
                         branches                - list all the branches
+                        status                  - get the status of the repository
 
                     Flags:
                         /ignore                 - ignores chat,
@@ -120,10 +121,15 @@ namespace Gitbot2.Source.Events
                         return;
                     }
 
-
                     string repoName = content.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ElementAt(1);
 
 
+
+                    if (!FileSystem.GetRepositories().Contains(Path.Combine(repoName)))
+                    {
+                        await client.SendMessageAsync(message.ChannelId, "Invalid repository, run `list` to see all listed repositories");
+                        return;
+                    }
 
                     if (FSOperations.SwitchRepo(repoName).Result == TaskStatus.RanToCompletion)
                     {

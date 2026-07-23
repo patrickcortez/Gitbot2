@@ -114,7 +114,7 @@ namespace Gitbot2.Source.Core
 
                         _users.ForEach((s) => {
 
-                            if (s.Username == "GitBot")
+                            if (s.Username == "GitCord")
                             {
                                 // Do nothing, since we cant use continue anyways
                             }

@@ -70,7 +70,7 @@ namespace Gitbot2.Source.Commands
 
         }
 
-        private async ValueTask MergeRepo(params object[] args) //might do async later, but just no for now
+        private async ValueTask MergeRepo(params object[] args) // merge repo
         {
             string path = config.GetValue<string>("Discord:Current");
             string branch = string.Empty;
