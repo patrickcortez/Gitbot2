@@ -131,6 +131,59 @@ namespace Gitbot2.Source.Events
                     {
                         await client.SendMessageAsync(message.ChannelId,"Something Went wrong...");
                     }
+                } else if (content.Equals("status", StringComparison.OrdinalIgnoreCase))
+                {
+                   string response = FSOperations.RepoStatus(Services.CreateProvider().Services.GetService<IConfiguration>());
+
+                    await client.SendMessageAsync(message.ChannelId, response);
+                } else if (content.StartsWith("commit", StringComparison.OrdinalIgnoreCase))
+                {
+                    Func<string, string[]> Tokenize = (line) =>
+                    {
+                        StringBuilder sb = new();
+                        List<string> tokens = new();
+                        bool inqoutes = false;
+
+                        foreach (char c in line)
+                        {
+
+                            if (c == '"')
+                            {
+                                inqoutes = !inqoutes;
+                                continue;
+                            }
+
+                            if(char.IsWhiteSpace(c) && !inqoutes)
+                            {
+                                tokens.Add(sb.ToString());
+                                sb.Clear();
+                                continue;
+                            }
+
+                            sb.Append(c);
+
+                        }
+
+                        if(sb.Length > 0)
+                        {
+                            tokens.Add(sb.ToString());
+                        }
+
+                        return tokens.ToArray();
+
+                    };
+
+                    string[] tokens = Tokenize(content);
+
+                    if (tokens.Count() < 2)
+                    {
+                        await client.SendMessageAsync(message.ChannelId, "You forgot to enter a commit message");
+                        return;
+                    }
+
+                   string response = FSOperations.CommitRepo(Services.CreateProvider().Services.GetService<IConfiguration>(), tokens[1]);
+
+                    await client.SendMessageAsync(message.ChannelId, response);
                 }
                 else
                 {

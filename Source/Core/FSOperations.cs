@@ -1,4 +1,5 @@
 ﻿using Gitbot2.Source.Utils;
+using LibGit2Sharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -79,7 +80,53 @@ namespace Gitbot2.Source.Core
             return (!string.IsNullOrEmpty(repo)) ? repo : string.Empty ;
         }
 
-        public static 
+        public static string CommitRepo(IConfiguration config,string msg)
+        {
+            try
+            {
+                string? current = config.GetValue<string>("Discord:Current");
+
+                Repository repo = new(current);
+                var repostat = repo.RetrieveStatus();
+
+                if (repostat.Untracked.Count() > 0 || repostat.Added.Count() > 0)
+                {
+                    if (repostat.Untracked.Count() > 0)
+                    {
+                        LibGit2Sharp.Commands.Stage(repo, "*");
+                    }
+
+                    var name = repo.Config.Get<string>("user.name");
+                    var email = repo.Config.Get<string>("user.email");
+
+                    repo.Commit(msg, new(name.Value, email.Value, DateTime.Now), new(name.Value, email.Value, DateTime.Now));
+
+                    logger.LogInformation("Commited: {} , {} , {}", msg, name.Value, email.Value);
+
+                    return "Repo Committed!";
+                }
+
+                return "Nothing to commit";
+            }catch(Exception ex)
+            {
+                logger.LogError(ex, "Something Went wrong while committing");
+                return "Something Went wrong while committing";
+            }
+        }
+
+        public static string RepoStatus(IConfiguration config)
+        {
+            string? path = config.GetValue<string>("Discord:Current");
+
+            Repository repo = new(path);
+
+           var stat =  repo.RetrieveStatus();
+
+            int ut =  stat.Untracked.Count(),added = stat.Added.Count();
+
+            return (ut > 0 || added > 0)? $" Untracked Files: {ut}  Added: {added}" : "On a Clean Branch, Nothing to commit";
+
+        }
         
     }
 }
