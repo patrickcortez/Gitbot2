@@ -79,7 +79,7 @@ Her is an example of config.json:
 
 ```
 
-> [!INFO]
+> [!NOTE]
 > Make sure to place it at the same directory as your executable.
 
 ---
