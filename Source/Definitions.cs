@@ -6,12 +6,14 @@ using System.Text;
 namespace Gitbot2.Source
 {
 
-    internal class _Roles
+    internal sealed class _Roles
     {
         public string[] Roles { get; set; }
 
         public string GenId { get; set; }
     }
+
+    
 
     internal enum RoleStatus
     {

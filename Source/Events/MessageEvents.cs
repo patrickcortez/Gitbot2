@@ -5,6 +5,7 @@ using LibGit2Sharp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
@@ -29,6 +30,7 @@ namespace Gitbot2.Source.Events
                 }
 
                 logger.LogInformation("Current User: {}", message.Author.Username);
+
 
                 RoleStatus status = await Utility.isAllowed(client, message);
 
@@ -203,8 +205,11 @@ namespace Gitbot2.Source.Events
         public async ValueTask HandleAsync(MessageReactionAddEventArgs reaction)
         {
             User? user = reaction.User;
+            IOptions<_Roles>? roles = Services.CreateProvider().Services.GetService<IOptions<_Roles>>();
 
-            object value = await Utility.GetValueAsync("GenId");
+            
+
+            object value = roles.Value.GenId;
 
             if(value is string)
             {

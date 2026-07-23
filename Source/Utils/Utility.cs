@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
@@ -14,8 +15,10 @@ namespace Gitbot2.Source.Utils
     internal static class Utility
     {
         private static ILogger logger;
+        private static IOptions<_Roles> config;
         static Utility(){
             logger = Services.CreateProvider("Utility").Services.GetRequiredService<ILogger>();
+            config = Services.CreateProvider("Utility").Services.GetService<IOptions<_Roles>>();
         }
         public static async Task<RoleStatus> isAllowed(RestClient client,Message message)
         {
@@ -24,7 +27,7 @@ namespace Gitbot2.Source.Utils
 
                 var gUser = await client.GetGuildUserAsync(message.GuildId!.Value, message.Author.Id);
 
-                object value = await Utility.GetValueAsync("Roles");
+                object value = config.Value.Roles;
 
                 RoleStatus final = RoleStatus.NotAllowed;
 

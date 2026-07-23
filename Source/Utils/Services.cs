@@ -1,4 +1,6 @@
 ﻿using GitBot2.Source;
+using LibGit2Sharp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -34,16 +36,20 @@ namespace Gitbot2.Source.Utils
                         | GatewayIntents.GuildPresences
                         | GatewayIntents.GuildMessageReactions;
                         
-
+                        
 
                     }
                 )
                 .AddGatewayHandlers(typeof(Program).Assembly)
                 .AddSingleton<ILogger>(LoggerFactory.Create(c => c.AddConsole()).CreateLogger(categoryname))
                 .AddLogging()
+                 
                 ;
 
+            builder.Configuration.AddJsonFile(Path.Combine(Environment.CurrentDirectory, "config.json"));
+            builder.Services.Configure<_Roles>(builder.Configuration);
 
+            
 
             return builder.Build();
         }
