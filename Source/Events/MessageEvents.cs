@@ -67,9 +67,13 @@ namespace Gitbot2.Source.Events
                         switch                  - switch to a repository
                         current                 - shows current repository
                         commit <message>        - commit changes with a message
-                        merge <b1> <b2>         - merge branches
+                        merge <b1>              - merge current branch with chosen branch
                         del <repo>              - deletes a repo
                         checkout <br>           - checksout branch
+                        branches                - list all the branches
+
+                    Flags:
+                        /ignore                 - ignores chat,
                 ";
 
                     await client.SendMessageAsync(message.ChannelId, help);
@@ -187,6 +191,42 @@ namespace Gitbot2.Source.Events
                    string response = FSOperations.CommitRepo(Services.CreateProvider().Services.GetService<IConfiguration>(), tokens[1]);
 
                     await client.SendMessageAsync(message.ChannelId, response);
+                }else if (content.StartsWith("merge", StringComparison.OrdinalIgnoreCase))
+                {
+                    string branch = content.Substring("merge".Length,content.Length - "merge".Length).Trim();
+
+                    //logger.LogInformation("Branch chosen: {}", branch);
+                    comm = new(content.Substring(0, "merge".Length), client, message.ChannelId, branch);
+
+                    int exc = await comm.ExecuteCommand();
+
+                    if(exc != 0)
+                    {
+                        await client.SendMessageAsync(message.ChannelId, $"Branch {branch} failed to merge");
+                        return;
+                    }
+
+                    
+                }else if (content.Equals("branches", StringComparison.OrdinalIgnoreCase))
+                {
+                    string response =  FSOperations.Branches(config: Services.CreateProvider().Services.GetService<IConfiguration>());
+
+                    await client.SendMessageAsync(message.ChannelId, response);
+                    return;
+                }else if (content.StartsWith("checkout", StringComparison.OrdinalIgnoreCase))
+                {
+                    logger.LogInformation("branch chosen: {}", content.Substring("checkout".Length, content.Length - "checkout".Length).Trim());
+                    string branch = content.Substring("checkout".Length, content.Length - "checkout".Length).Trim();
+
+                    if (string.IsNullOrWhiteSpace(branch))
+                    {
+                        await client.SendMessageAsync(message.ChannelId,"Branch cannot be empty");
+                        return;
+                    }
+
+                    string response = FSOperations.Checkout(config: Services.CreateProvider().Services.GetService<IConfiguration>(),branch: branch);
+                    await client.SendMessageAsync(message.ChannelId, response);
+                    return;
                 }
                 else
                 {

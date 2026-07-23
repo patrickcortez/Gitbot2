@@ -127,6 +127,49 @@ namespace Gitbot2.Source.Core
             return (ut > 0 || added > 0)? $" Untracked Files: {ut}  Added: {added}" : "On a Clean Branch, Nothing to commit";
 
         }
-        
+
+
+        public static string Branches(IConfiguration config)
+        {
+            string? path = config.GetValue<string>("Discord:Current");
+
+            Repository repo = new(path);
+
+            var branches = repo.Branches;
+
+            return  $" List of branches: {string.Join('\n',branches.Select(c => (repo.Head.FriendlyName == c.FriendlyName)? "*"+c.FriendlyName : c.FriendlyName ))}";
+
+        }
+
+        public static string Checkout(IConfiguration config, string branch)
+        {
+            try
+            {
+                string? path = config.GetValue<string>("Discord:Current");
+
+                Repository repo = new(path);
+
+                Branch? target = repo.Branches[branch]; // not null
+
+                if(target is null) // null guard clause
+                {
+                  target =  repo.CreateBranch(branch);
+                }
+
+                Branch checkout = LibGit2Sharp.Commands.Checkout(repo, target);
+
+                if (checkout is not null)
+                {
+                    return $"Checked out to {checkout.FriendlyName}";
+                }
+
+                return $"Failed to checkout to {branch}";
+            }catch(Exception ex)
+            {
+                logger.LogError(ex, "Something went wrong while checking out");
+                return $"Failed to Checkout {branch}";
+            }
+        }
+
     }
 }
