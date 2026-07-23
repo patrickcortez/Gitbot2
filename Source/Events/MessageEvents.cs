@@ -10,6 +10,7 @@ using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Rest;
 using System.Text;
+using System.Threading.Channels;
 
 namespace Gitbot2.Source.Events
 {
@@ -203,7 +204,17 @@ namespace Gitbot2.Source.Events
         {
             User? user = reaction.User;
 
-            await client.SendMessageAsync((ulong)Channels.Genchat, $"{user.Username} reacted with {reaction.Emoji.Name}");
+            object value = await Utility.GetValueAsync("GenId");
+
+            if(value is string)
+            {
+                ulong GenId = ulong.Parse(value.ToString());
+                await client.SendMessageAsync(GenId, $"{user.Username} reacted with {reaction.Emoji.Name}");
+                return;
+            }
+
+            logger.LogError("GenId isnt a string");
+            return;
         }
     }
 

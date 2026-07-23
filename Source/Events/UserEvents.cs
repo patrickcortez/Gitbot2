@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Gitbot2.Source.Utils;
+using Microsoft.Extensions.Logging;
 using NetCord;
 using NetCord.Hosting.Gateway;
 using NetCord.Rest;
@@ -14,7 +15,9 @@ namespace Gitbot2.Source.Events
 
         public ValueTask HandleAsync(GuildUser user)
         {
-            client.SendMessageAsync((ulong)Channels.Genchat, $"Greetings {user.Username}");
+            object value = Utility.GetValueAsync("GenId");
+            ulong Genchat = ulong.Parse(value as string);
+            client.SendMessageAsync(Genchat, $"Greetings {user.Username}");
 
             Unum++;
             return ValueTask.CompletedTask;
