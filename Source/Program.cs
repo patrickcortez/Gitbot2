@@ -8,6 +8,8 @@ public static class Program{
 
 
     private static ILogger logger;
+    private static bool log = false;
+    private static readonly string version = "0.0.1";
 
     static Program()
     {
@@ -18,12 +20,37 @@ public static class Program{
     {
         try
         {
-            // Instantiate Bot
-            Bot bot = new();
-            // Run our Bot
-            return await bot.RunAsync();
 
-        }catch(Exception ex)
+            if (args.Length > 0) // flag check
+            {
+
+                string cmd = args[0].ToLower().TrimStart('-');
+
+                if (cmd == "log")
+                {
+                    log = true;
+                } else if(cmd == "version")
+                {
+                    Console.WriteLine($"Gitbot {version} by Tezzz");
+                    return 0;
+                }
+
+            }
+
+            // Instantiate Bot
+            Bot bot = new(true);
+            // Run our Bot
+            int exc = await bot.RunAsync();
+
+            if (log)
+            {
+                logger.LogInformation("Gitbot exited with: {}", exc);
+            }
+
+            return exc;
+
+        }
+        catch(Exception ex)
         {
             logger.LogError(ex,"An Error has occured");
 

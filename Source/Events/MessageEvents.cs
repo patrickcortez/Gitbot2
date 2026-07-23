@@ -1,5 +1,9 @@
 ﻿using Gitbot2.Source.Commands;
+using Gitbot2.Source.Core;
 using Gitbot2.Source.Utils;
+using LibGit2Sharp;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetCord;
 using NetCord.Gateway;
@@ -16,11 +20,6 @@ namespace Gitbot2.Source.Events
         {
             try
             {
-                char prefix = '/'; //CommandPrefix
-                bool isallowed = false;
-                
-               
-
 
 
                 if (message.Author.IsBot)
@@ -28,12 +27,18 @@ namespace Gitbot2.Source.Events
                     return;
                 }
 
-                if (Utility.isAllowed(client, message).Equals(RoleStatus.NotAllowed))
+                logger.LogInformation("Current User: {}", message.Author.Username);
+
+                RoleStatus status = await Utility.isAllowed(client, message);
+
+                
+
+                if (status == RoleStatus.NotAllowed)
                 {
 
                     await client.SendMessageAsync(message.ChannelId, $"{message.Author.Username} is not permitted");
                     return;
-                } else if (Utility.isAllowed(client, message).Equals(RoleStatus.Error))
+                } else if (status == RoleStatus.Error)
                 {
                     await client.SendMessageAsync(message.ChannelId, "Failed to get user role,discontinuing"); // discontinue in an event of an error for safety
                     return;
@@ -44,6 +49,12 @@ namespace Gitbot2.Source.Events
                 logger.LogInformation($"{message.Author.Username} {message.Content}");
 
                 string content = message.Content;
+
+                if (content.EndsWith("/ignore", StringComparison.OrdinalIgnoreCase))
+                {
+                    logger.LogInformation("Ignoring {}", content);
+                    return;
+                }
 
                 if (content.Equals("help", StringComparison.OrdinalIgnoreCase))
                 {
@@ -67,24 +78,59 @@ namespace Gitbot2.Source.Events
                 else if (content.Equals("hi", StringComparison.OrdinalIgnoreCase) || content.Equals("hello", StringComparison.OrdinalIgnoreCase))
                 {
                     await client.SendMessageAsync(message.ChannelId, $"Hey {message.Author.Username}!");
-                    
+
                 }
                 else if (content.Equals("list", StringComparison.OrdinalIgnoreCase))
                 {
                     string[] repositories = FileSystem.GetRepositories();
 
-                    string msg = (repositories != null)? string.Join('\n', repositories).ToString(): string.Empty;
+                    string msg = (repositories != null) ? string.Join('\n', repositories).ToString() : string.Empty;
 
-                    comm = new(content,client,message.ChannelId);
+                    comm = new(content, client, message.ChannelId);
 
                     int success = await comm.ExecuteCommand();
 
-                    if(success != 0)
+                    if (success != 0)
                     {
-                        await client.SendMessageAsync(message.ChannelId,"Something went wrong, try again later");
+                        await client.SendMessageAsync(message.ChannelId, "Something went wrong, try again later");
                     }
 
                     logger.LogInformation("Command exited with {}", success);
+                }
+                else if (content.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
+                {
+                    await client.SendMessageAsync(message.ChannelId, "Good bye!");
+                    Environment.Exit(0);
+                } else if (content.Equals("current", StringComparison.OrdinalIgnoreCase))
+                {
+                    await client.SendMessageAsync(message.ChannelId, $"Current Repository: {FSOperations.GetCurrent(config: Services.CreateProvider().Services.GetService<IConfiguration>())}");
+                } else if (content.StartsWith("switch", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (content.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Count() < 2)
+                    {
+                        await client.SendMessageAsync(message.ChannelId, "missing repo name!");
+
+                        return;
+                    }
+
+
+                    string repoName = content.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ElementAt(1);
+
+
+
+                    if (FSOperations.SwitchRepo(repoName).Result == TaskStatus.RanToCompletion)
+                    {
+                        await client.SendMessageAsync(message.ChannelId, $"Repo Switched to {repoName}");
+
+
+                    }
+                    else if (FSOperations.SwitchRepo(repoName).Result == TaskStatus.Canceled)
+                    {
+                        await client.SendMessageAsync(message.Id, $"Failed to Switch Repo");
+                    } else if (FSOperations.SwitchRepo(repoName).Result == TaskStatus.Faulted)
+                    {
+                        await client.SendMessageAsync(message.ChannelId,"Something Went wrong...");
+                    }
                 }
                 else
                 {

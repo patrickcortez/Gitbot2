@@ -1,0 +1,8 @@
+Tasks:
+
+[*] Implement Current
+[*] Implement Switch
+[ ] Implement Commit
+[ ] Implement Merge
+[ ] Implement Delete
+[ ] Implement Checkout

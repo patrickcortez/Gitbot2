@@ -24,7 +24,7 @@ namespace Gitbot2.Source.Utils
 
                 if(gUser.RoleIds.Contains((ulong)Roles.Owner) || gUser.RoleIds.Contains((ulong)Roles.Developer))
                 {
-                    logger.LogInformation("User[{}] w/ has been verified", gUser.Username);
+                    logger.LogInformation("User[{}] has been verified", gUser.Username);
                     return RoleStatus.Allowed;
                 }
 
@@ -37,5 +37,7 @@ namespace Gitbot2.Source.Utils
             }
             
         }
+
+        
     }
 }
