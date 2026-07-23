@@ -47,9 +47,40 @@ users to manage their Git Repositories by talking to the bot.
 
 ## Configuration
 
-> [!NOTE] 
-> To be continued...
+Inorder to configure **Gitbot** for your server, Make sure to have:
+- repos.json : For listing all allowed repositories to switch to.
+- config.json : For placing  all allowed roles and channelids.
 
+Here is an example of repos.json:
+
+```json
+
+{
+  "Repos":[
+    "C:\\Users\\User\\Test1",
+    "C:\\Users\\User\\Repos\\Test2",
+    "C:\\Users\\User\\Repos\\Test3"
+  ]
+}
+
+```
+
+Her is an example of config.json:
+
+```json
+
+{
+  "Roles": [
+   "123456789",
+   "123456798"
+  ],
+  "GenId": "987654321"
+}
+
+```
+
+> [!INFO]
+> Make sure to place it at the same directory as your executable.
 
 ---
 
