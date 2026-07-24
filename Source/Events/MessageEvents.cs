@@ -23,6 +23,12 @@ namespace Gitbot2.Source.Events
             try
             {
 
+                if (MessageToggle.Ignore)
+                {
+                    logger.LogInformation("Messages has been set to ignore");
+                    
+                    return;
+                }
 
                 if (message.Author.IsBot)
                 {
@@ -34,7 +40,7 @@ namespace Gitbot2.Source.Events
 
                 RoleStatus status = await Utility.isAllowed(client, message);
 
-                
+                // add '/' prefix to commands, writing /ignore is annoying. 
 
                 if (status == RoleStatus.NotAllowed)
                 {
@@ -53,11 +59,11 @@ namespace Gitbot2.Source.Events
 
                 string content = message.Content;
 
-                if (content.EndsWith("/ignore", StringComparison.OrdinalIgnoreCase))
-                {
-                    logger.LogInformation("Ignoring {}", content);
-                    return;
-                }
+                //if (content.EndsWith("/ignore", StringComparison.OrdinalIgnoreCase))
+                //{
+                //    logger.LogInformation("Ignoring {}", content);
+                //    return;
+                //}
 
                 if (content.Equals("help", StringComparison.OrdinalIgnoreCase))
                 {

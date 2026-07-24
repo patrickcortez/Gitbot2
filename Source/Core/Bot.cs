@@ -1,16 +1,14 @@
-﻿using Gitbot2.Source.Utils;
+﻿using Gitbot2.Source.Commands;
+using Gitbot2.Source.Utils;
+using GitBot2.Source;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NetCord;
 using NetCord.Gateway;
-using NetCord.Hosting.Gateway;
+using NetCord.Hosting.Services;
 using NetCord.Rest;
-using NetCord.Services;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Gitbot2.Source.Core
@@ -134,6 +132,8 @@ namespace Gitbot2.Source.Core
                         //return ValueTask.CompletedTask;
                     }
                 };
+               
+                
 
                 return 0;
             }catch(Exception ex)
@@ -155,7 +155,9 @@ namespace Gitbot2.Source.Core
         {
             try
             {
-                
+
+                _host.AddModules(typeof(Program).Assembly);
+
                 await _host.StartAsync();
 
                 await Task.Delay(-1);

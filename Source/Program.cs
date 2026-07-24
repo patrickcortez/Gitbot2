@@ -1,4 +1,5 @@
-﻿using Gitbot2.Source.Core;
+﻿using Gitbot2.Source;
+using Gitbot2.Source.Core;
 using Gitbot2.Source.Utils;
 using Microsoft.Extensions.Logging;
 
@@ -38,6 +39,7 @@ public static class Program{
             }
 
             // Instantiate Bot
+            MessageToggle.Ignore = false;
             Bot bot = new(true);
             // Run our Bot
             int exc = await bot.RunAsync();

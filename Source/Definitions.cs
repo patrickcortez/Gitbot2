@@ -13,7 +13,10 @@ namespace Gitbot2.Source
         public string GenId { get; set; }
     }
 
-    
+    internal static class MessageToggle
+    {
+        public static bool Ignore { get; set; } = false;
+    }
 
     internal enum RoleStatus
     {

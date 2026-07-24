@@ -8,5 +8,9 @@ Tasks:
 [ ] Implement Delete (-Idk, its risky-)
 [*] Implement Checkout
 
+[ ] Move Message Commands to their own command modules
 [ ] Clean branches output, when running `branches`
+[ ] Add / prefix to commands
+[ ] Update the discord server
+[ ] Update Bot banner and bot description
 [ ] Add more flags
